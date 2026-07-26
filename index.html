@@ -1,52 +1,103 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>公式サイトへのご案内</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fafafa;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        a.button {
-            display: inline-block;
-            background-color: #007aff;
-            color: white;
-            text-decoration: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-weight: 600;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-        a.button:hover {
-            background-color: #005bb5;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Masaya Inaba</title>
+<meta name="description" content="稲葉雅也のポートフォリオサイト。個人開発しているアプリの紹介や自己紹介を掲載しています。" />
+<link rel="icon" href="assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+<header class="site-header">
     <div class="container">
-        <h1>公式サイトへのご案内</h1>
-        <p>以下のボタンをクリックすると、公式サイト(Studioで作成されたサイト)へ移動します。</p>
-        <a href="https://ma-inaba.studio.site" class="button" target="_blank" rel="noopener noreferrer">
-            公式サイトへ移動
-        </a>
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
     </div>
+</header>
+
+<main>
+    <section class="hero container">
+        <div class="avatar-row">
+            <div class="avatar"><img src="assets/profile.jpg" alt="Masaya Inaba" /></div>
+            <div>
+                <span class="eyebrow">個人開発</span>
+                <h1>Masaya Inaba</h1>
+            </div>
+        </div>
+        <p class="lead">
+            iOSエンジニア / 個人開発者。作ったアプリを紹介しています。
+        </p>
+    </section>
+
+    <section id="apps" class="block container">
+        <h2>作っているアプリ</h2>
+        <p class="section-lead">現在公開・開発中のアプリです。</p>
+
+        <div class="app-grid">
+            <a href="apps/sorosoro.html" class="app-card">
+                <div class="app-icon">
+                    <img src="assets/sorosoro-icon.jpg" alt="Sorosoroアイコン" />
+                </div>
+                <h3>Sorosoro</h3>
+                <p>帰り道に、買い忘れをゼロに。指定した場所に近づいたタイミングで、あらかじめ用意したメモをスマートにお知らせします。</p>
+                <span class="card-cta">詳しく見る →</span>
+            </a>
+
+            <a href="apps/hitoshizuku.html" class="app-card">
+                <div class="app-icon">
+                    <img src="assets/hitoshizuku-icon.jpg" alt="ひとしずくアイコン" />
+                </div>
+                <h3>ひとしずく</h3>
+                <p>毎日を、記念日に。なんでもない日の思い出を、ひとしずくずつ積み重ねていくカレンダーアプリ。</p>
+                <span class="card-cta">詳しく見る →</span>
+            </a>
+
+            <a href="apps/ten-year-diary.html" class="app-card">
+                <div class="app-icon">
+                    <img src="assets/ten-year-diary-icon.png" alt="10年日記アイコン" />
+                </div>
+                <h3>10年日記</h3>
+                <p>同じ日付の日記を10年分、少しずつ積み重ねていく日記アプリ。過去の同じ日の記録を、年をまたいで見比べられます。</p>
+                <span class="card-cta">詳しく見る →</span>
+            </a>
+        </div>
+    </section>
+
+    <section id="about" class="block container">
+        <h2>About me</h2>
+        <div class="prose">
+            <p>
+                ふたりの猫、「きなり」と「すけろく」と気ままに暮らす毎日。
+                ブリーダーさん曰く双子――でも、性格もルックスも全然違うのはきっと"うちだけの特別"。そんなギャップすら愛おしい存在です。
+            </p>
+            <p>
+                日々、iOSアプリの世界でアイデアとコードを行き来するリモートエンジニア。作ること、試すこと、考えることが好きで、休日もつい個人開発に手が伸びます。
+                位置情報系アプリのデバッグは"冒険"という名の課題。次の作品は、まだ想像の中。
+            </p>
+            <p>
+                SNSはおやすみ中。代わりに、生のお笑いライブで心をリフレッシュしています。
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
 </body>
 </html>
