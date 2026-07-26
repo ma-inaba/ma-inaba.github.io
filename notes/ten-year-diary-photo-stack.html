@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>重なった写真を、本物の山っぽく見せる工夫 | 開発ノート | Masaya Inaba</title>
+<meta name="description" content="10年日記で1日に複数枚の写真がある時の見せ方を、机の上に積んだ写真の山っぽく見せるためにやったこと。" />
+<link rel="icon" href="../assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container note-article">
+    <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
+
+    <div class="note-meta" style="margin-top: 28px;">
+        <span class="note-app-badge">10年日記</span>
+        <span class="note-date">2026-07-24</span>
+    </div>
+    <h1>重なった写真を、本物の山っぽく見せる工夫</h1>
+
+    <div class="prose">
+        <p>
+            10年日記では、1日の記録に複数枚の写真を添えられる。最初はただ横に並べて表示していたんだけど、味気ない見た目だったので、机の上にポラロイド写真を無造作に積んだような、少し重なって斜めにズレている見せ方に変えてみた。
+        </p>
+
+        <h2>回転とズレを、規則的に散らす</h2>
+        <p>
+            完全にランダムな角度で重ねると、表示するたびに角度が変わってチラついて見えるし、時にはバランスの悪い見た目になってしまう。
+            そこで、写真の並び順(1枚目、2枚目、3枚目…)に応じて、あらかじめ決まった角度とズレ幅を割り当てることにした。1枚目は正面、2枚目は右にちょっと傾いて右下にズレる、3枚目は左に傾いて左下にズレる、というように。
+            同じ日の写真なら毎回同じ見え方になるので、安定して自然に見える。
+        </p>
+        <p>
+            見せる枚数は最大3枚までにして、4枚目以降があれば「+2」のような数字を添えるバッジを重ねて、枚数が多いことだけ分かるようにした。全部重ねて表示すると逆に何が写っているのか分からなくなってしまうので、ここは欲張らないようにした。
+        </p>
+
+        <h2>タップと長押しの両立</h2>
+        <p>
+            この写真の山は、タップすると写真が大きく表示されて、長押しすると編集画面が開く、という2つの操作を持たせている。単純に両方のジェスチャーを同じ場所に付けると、タップしたつもりが長押し判定されたり、逆に長押ししたつもりがタップ扱いになったりして、操作感がちぐはぐになりやすい。
+            長押しの判定が始まった瞬間に「今は長押し中」というフラグを立てて、そのすぐ後に来るタップの判定を1回だけ無視するようにしたら、両方が自然に共存するようになった。
+        </p>
+
+        <h2>持ち帰ったこと</h2>
+        <ul>
+            <li>「ランダムに見えるけど実は規則的」にした方が、見た目の自然さと安定性を両立できることが多い</li>
+            <li>情報を盛り込みすぎず、あえて見せる枚数に上限を設けた方が結果的に見やすい</li>
+            <li>タップと長押しを同じ場所に共存させる時は、判定の順番と「直後の別ジェスチャーを一度だけ無視する」仕組みが効く</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>開発ノート | Masaya Inaba</title>
+<meta name="description" content="個人開発しているアプリを作る中で遭遇したバグや詰まったこと、その解決までの記録。" />
+<link rel="icon" href="../assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/" class="active">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <a href="/" class="back-link">← トップに戻る</a>
+
+    <section class="block" style="padding-bottom: 8px;">
+        <h2>開発ノート</h2>
+        <p class="section-lead">
+            アプリを作っている最中に実際に詰まったこと、原因の調べ方、どう解決したかの記録です。
+            同じ問題に当たった誰かの手がかりになれば、という気持ちで残しています。
+        </p>
+    </section>
+
+    <section class="block" style="padding-top: 0;">
+        <div class="note-list">
+
+            <a href="ten-year-diary-icon-from-graph.html" class="note-card">
+                <div class="note-meta">
+                    <span class="note-app-badge">10年日記</span>
+                    <span class="note-date">2026-07-26</span>
+                </div>
+                <h3>アプリの中のグラフを、そのままアイコンにした話</h3>
+                <p>お気に入りだった「気分の傾向」のドーナツグラフを、そのままアプリアイコンに転用。角の丸みで一度失敗し、図形を縮めて戻すという発想に切り替えるまで。</p>
+            </a>
+
+            <a href="ten-year-diary-notification-icon-cache.html" class="note-card">
+                <div class="note-meta">
+                    <span class="note-app-badge">10年日記</span>
+                    <span class="note-date">2026-07-26</span>
+                </div>
+                <h3>ホーム画面のアイコンは直ったのに、通知だけ古いアイコンのまま表示される</h3>
+                <p>新しいアプリアイコンに差し替えたら、通知の小さいアイコンだけ何度再インストールしても直らなかった話。最小構成での比較実験から、原因は端末側の見えないキャッシュだと判明するまで。</p>
+            </a>
+
+            <a href="ten-year-diary-icon-composer-setup.html" class="note-card">
+                <div class="note-meta">
+                    <span class="note-app-badge">10年日記</span>
+                    <span class="note-date">2026-07-26</span>
+                </div>
+                <h3>新しいアイコン形式(Icon Composer)、Assets.xcassetsの中に入れたらビルドが通らなかった</h3>
+                <p>iOS 26の新しいアプリアイコン形式を試したら、資産カタログの中に置いてもコンパイラが一切認識してくれない。実在するアプリの実例を調べて、正しい置き場所に気づくまで。</p>
+            </a>
+
+            <a href="ten-year-diary-scroll-stutter.html" class="note-card">
+                <div class="note-meta">
+                    <span class="note-app-badge">10年日記</span>
+                    <span class="note-date">2026-07-25</span>
+                </div>
+                <h3>スクロールがカクつく原因が、ジェスチャーでもレイアウトでもなかった話</h3>
+                <p>写真タブのスクロールが重くて、ジェスチャーの実装やレイアウトの計算方法を何度も見直したのに直らなかった。最終的な原因は、もっと基本的なところにあった。</p>
+            </a>
+
+            <a href="ten-year-diary-photo-app-style-paging.html" class="note-card">
+                <div class="note-meta">
+                    <span class="note-app-badge">10年日記</span>
+                    <span class="note-date">2026-07-24</span>
+                </div>
+                <h3>写真Appみたいなスワイプの操作感、どう作ったか</h3>
+                <p>隣のページが少し小さく見える、あの操作感の作り方。仕組みは比例計算だけのシンプルなものだった。</p>
+            </a>
+
+            <a href="ten-year-diary-photo-stack.html" class="note-card">
+                <div class="note-meta">
+                    <span class="note-app-badge">10年日記</span>
+                    <span class="note-date">2026-07-24</span>
+                </div>
+                <h3>重なった写真を、本物の山っぽく見せる工夫</h3>
+                <p>1日に複数枚ある写真を、机に積んだポラロイドのように見せるための回転・ズレの工夫と、タップ/長押しを両立させる小さな仕掛け。</p>
+            </a>
+
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>

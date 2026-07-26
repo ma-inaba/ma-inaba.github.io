@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>写真Appみたいなスワイプの操作感、どう作ったか | 開発ノート | Masaya Inaba</title>
+<meta name="description" content="10年日記のホーム画面と写真タブで採用した、隣のページが少し小さく見えるスワイプ表現をどう実装したか。" />
+<link rel="icon" href="../assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container note-article">
+    <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
+
+    <div class="note-meta" style="margin-top: 28px;">
+        <span class="note-app-badge">10年日記</span>
+        <span class="note-date">2026-07-24</span>
+    </div>
+    <h1>写真Appみたいなスワイプの操作感、どう作ったか</h1>
+
+    <div class="prose">
+        <p>
+            10年日記のホーム画面は、左右にスワイプすると日付が切り替わる作りになっている。写真タブも、年ごとの写真を左右スワイプで見比べられる。
+            この時に目指したのは、iPhone標準の写真Appでスワイプした時の、あの感覚。今見ているページはそのままの大きさで、隣のページはひとまわり小さく見えていて、指を離すとふわっと真ん中に収まる、あの動き。
+        </p>
+
+        <h2>仕組み自体はシンプル</h2>
+        <p>
+            画面には常に「今のページ」「ひとつ前」「ひとつ次」の3枚を並べて用意しておく。指でドラッグしている量に応じて、3枚をまとめて左右に動かす。
+            ポイントは、その動いている量に応じて、それぞれのページの拡大率を少しずつ変えているところ。今のページからの距離が離れるほど、そのページは少しだけ縮んで見える。指を離す時の距離がちょうどゼロになる(=今のページが画面の中心に来る)瞬間に、拡大率もちょうど100%に戻る。
+        </p>
+        <p>
+            数式にすると難しそうに見えるけど、実際は「中心からの距離」を「画面の幅」で割って、その割合だけ縮める、という単純な比例計算だけ。これだけで、指の動きに合わせて自然に拡大縮小するアニメーションになる。
+        </p>
+
+        <h2>地味に苦労したところ</h2>
+        <p>
+            ホーム画面は上下スクロールと左右スワイプが同じ画面に共存しているので、斜めに指を動かした時に「上下操作なのか左右操作なのか」を最初の一瞬で正しく判定する必要があった。
+            判定を甘くすると、ちょっと斜めに指がブレただけで意図しない方向に引っかかってしまう。指を動かし始めた最初の移動量だけを見て、横方向の動きが縦方向よりも十分大きい時だけ「これは左右スワイプだ」と判定するようにして、一度決めた判定はその指を離すまで変えないようにしたら安定した。
+        </p>
+
+        <h2>持ち帰ったこと</h2>
+        <ul>
+            <li>「距離に応じて少しずつ変化する」系の演出は、複雑な計算をしなくても比例計算だけで十分自然に見える</li>
+            <li>複数方向のジェスチャーが共存する画面では、方向の判定を「最初の一瞬だけで決めて、途中で変えない」ようにすると安定する</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>

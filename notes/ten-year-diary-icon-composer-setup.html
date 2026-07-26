@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>新しいアイコン形式、資産カタログの中に入れたらビルドが通らなかった | 開発ノート | Masaya Inaba</title>
+<meta name="description" content="iOS 26の新しいアプリアイコン形式（Icon Composer）を、資産カタログの中に置いたらコンパイラに一切認識されなかった話。" />
+<link rel="icon" href="../assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container note-article">
+    <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
+
+    <div class="note-meta" style="margin-top: 28px;">
+        <span class="note-app-badge">10年日記</span>
+        <span class="note-date">2026-07-26</span>
+    </div>
+    <h1>新しいアイコン形式、資産カタログの中に入れたらビルドが通らなかった</h1>
+
+    <div class="prose">
+        <p>
+            10年日記のアプリ内の「気分の傾向」グラフをモチーフにしたアイコンを、レイヤーを重ねて立体的に見せる新しい仕組み(Icon Composerという専用ツールで作る形式)で作ってみた。
+            背景と5色のリング状のパーツ、合計6枚の画像を書き出して、専用ツールで組み立てて完成。あとはXcodeのプロジェクトに取り込むだけ、のはずだった。
+        </p>
+
+        <h2>最初のつまずき</h2>
+        <p>
+            それまでアプリアイコンは「Assets.xcassets」という、色やアイコンなどの見た目に関する素材をまとめて管理するフォルダの中に置くものだと思っていたので、新しいアイコンのファイルもそこに入れた。
+            ところがビルドしようとすると、資産カタログのコンパイラが「AppIconという名前に一致するアイコンセットが見つからない」というエラーを出して止まってしまう。
+        </p>
+        <p>
+            ファイル名も設定名も合っているはずなのに、まるでそこに何も置いていないかのように振る舞う。最初は自分の設定ミスを疑って、名前や配置を何度も見直したけど変化はなかった。
+        </p>
+
+        <h2>実在するアプリを調べる</h2>
+        <p>
+            手元のMacに入っている、同じ新しいアイコン形式を使っていそうなアプリの実際のファイル構成を覗いてみることにした。すると、そのアプリのアイコンファイルは資産カタログの中ではなく、外側に単独のファイルとして置かれていた。
+        </p>
+        <p>
+            試しに同じように、新しいアイコンのファイルを資産カタログの外に出して、コンパイラに「このファイルとこの資産カタログ、両方を渡すよ」という形で伝えるように変えたら、あっさりビルドが通った。
+        </p>
+
+        <h2>結局の原因</h2>
+        <p>
+            新しいアイコン形式は、見た目としては昔からある「アイコンセット」の仲間のように見えるけど、実際の扱われ方としては資産カタログそのものに近い、独立した存在だったらしい。
+            資産カタログの中の一部品として扱おうとしたのが、そもそもの前提から間違っていた。
+        </p>
+
+        <h2>持ち帰ったこと</h2>
+        <ul>
+            <li>新しい技術の使い方に迷ったら、ドキュメントだけでなく実在する完成品の中身を覗いてみると手がかりが早く見つかることがある</li>
+            <li>見た目が似ている仕組みでも、内部的な扱われ方(単純な部品なのか、独立した単位なのか)は全く違うことがある</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>

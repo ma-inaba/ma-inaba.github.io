@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>スクロールのカクつきの原因が、ジェスチャーでもレイアウトでもなかった話 | 開発ノート | Masaya Inaba</title>
+<meta name="description" content="10年日記の写真タブでスクロールがカクついていた原因を探して、思わぬところに行き着くまでの話。" />
+<link rel="icon" href="../assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container note-article">
+    <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
+
+    <div class="note-meta" style="margin-top: 28px;">
+        <span class="note-app-badge">10年日記</span>
+        <span class="note-date">2026-07-25</span>
+    </div>
+    <h1>スクロールのカクつきの原因が、ジェスチャーでもレイアウトでもなかった話</h1>
+
+    <div class="prose">
+        <p>
+            10年日記には、同じ日付の写真を年ごとに見比べられる画面がある。左右にスワイプして年を切り替える、写真アプリのような操作感を目指して作っていたんだけど、上下にスクロールするとタイトル部分がガタガタと震えるように引っかかる現象が出ていた。
+        </p>
+
+        <h2>まずジェスチャーを疑った</h2>
+        <p>
+            左右スワイプでの年の切り替えと、上下スクロールが同じ画面の中で共存しているので、最初はこの2つの操作の判定がお互いに干渉しているんだと思った。
+            スワイプの方向を最初の一瞬でしっかり固定する処理を入れたり、判定の感度を調整したりしたけど、カクつきは変わらなかった。
+        </p>
+
+        <h2>次にレイアウトの計算方法を疑った</h2>
+        <p>
+            画面の横幅を取得する仕組みを変えてみたらどうか、というのが次の仮説だった。試してみたところ、今度はレイアウトそのものが崩れてしまって、逆に状況が悪化した。
+            一度その変更を取りやめて、元の状態に戻すところからやり直した。
+        </p>
+
+        <h2>本当の原因</h2>
+        <p>
+            落ち着いて見返してみたら、原因はもっと基本的なところにあった。写真を並べているグリッド表示に、画面に写っている分だけを効率的に描画する仕組み(スクロールする一覧などで定番の、負荷を抑えるための機能)を使っていたんだけど、
+            このグリッドが「縦方向の高さを自動で調整する」という別の指定と組み合わさった時に、スクロールするたびに高さの再計算が何度も走ってしまい、それが引っかかりの正体だった。
+        </p>
+        <p>
+            効率化のための機能が、今回の使い方とはむしろ逆効果になっていた。この部分を、効率化機能を使わない普通の並べ方に変えたら、引っかかりは綺麗に消えた。
+        </p>
+
+        <h2>持ち帰ったこと</h2>
+        <ul>
+            <li>「効率化のための機能」は常に速くなるわけではなく、使い方によっては逆に遅くなることがある</li>
+            <li>不具合の原因は、操作(ジェスチャー)よりも表示の仕組み(レイアウト)側にあることも多い</li>
+            <li>間違った仮説で状況が悪化した時は、一度きっぱり元に戻してから、次の仮説に進んだ方が結果的に早い</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>
