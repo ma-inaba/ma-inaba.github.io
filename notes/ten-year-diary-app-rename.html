@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>「10年日記」というアプリ名を、リリース直前に変えた話 | 開発ノート | Masaya Inaba</title>
+<meta name="description" content="App Store提出の準備を進めていたら、同じ名前・同じコンセプトの既存アプリに気づいた。名前を考え直し、「めぐる日記」に決めるまでの話。" />
+<link rel="icon" href="../assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="../styles.css?v=2" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container note-article">
+    <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
+
+    <div class="note-meta" style="margin-top: 28px;">
+        <span class="note-app-badge">めぐる日記</span>
+        <span class="note-date">2026-07-29</span>
+    </div>
+    <h1>「10年日記」というアプリ名を、リリース直前に変えた話</h1>
+
+    <div class="prose">
+        <p>
+            機能もスクリーンショットも揃って、いよいよApp Store Connectでアプリを登録する、というところまで来ていた。アプリ名はずっと「10年日記」で作ってきていたので、そのまま入力するだけのはずだった。
+        </p>
+
+        <h2>「これ、もう他にあるやつじゕ...」</h2>
+        <p>
+            登録の直前になって、ふと不安になって検索してみた。出てきたのは「日記帳 - 10年日記」というアプリと、「連用日記アプリ」というアプリ。前者はまさに同じ名前、後者は「同じ日付を年ごとに見比べる」という、まさに自分が作っているアプリと同じコンセプトのものだった。
+        </p>
+        <p>
+            自分では「10年日記」という言葉をこのアプリ固有の名前だと思い込んでいたけれど、実際は日記の一形式を指す一般的な呼び方で、同じ発想のアプリが既に何本も存在するジャンルだった。このまま出しても、検索結果に埋もれるか、最悪紛らわしいと思われるかもしれない。
+        </p>
+
+        <h2>名前を考え直す</h2>
+        <p>
+            他に作っているアプリ(「ひとしずく」「Sorosoro」)が、説明的な名前ではなく、詩的な一語の名前だったので、同じ方向性で考えることにした。「年輪日記」「かさね日記」「めぐる日記」「十年ごよみ」あたりを候補に出して、最終的に「めぐる日記」に決めた。毎年同じ日付が巡ってくる、というアプリの本質にも合っている気がした。
+        </p>
+        <p>
+            決める前に改めて「めぐる日記」でも検索して、同名のアプリが無いことを確認してから確定させた。
+        </p>
+
+        <h2>「表示名だけ変える」と決めたこと</h2>
+        <p>
+            名前を変えるとなると、Bundle IDやApp Groupの識別子、Xcodeのプロジェクト名まで全部揃えて変えたくなる気持ちもあったけれど、そこまでやると審査未提出の今だからこそ低リスクとはいえ、作業量は一気に増える。最終的に「ユーザーに見える表示名だけ変える」と決めた。内部の識別子は今まで通り`TenYearDiary`のまま。ユーザーには見えない場所なので、実害は無い。
+        </p>
+
+        <h2>直したのに直っていない、という不思議</h2>
+        <p>
+            `CFBundleDisplayName`を新しい名前に変えてビルドし直したのに、実機のホーム画面のアイコン名だけがどうしても古いままだった。アプリ内の他の画面(起動画面、使い方、共有カードなど)は全部正しく新しい名前になっているのに、ホーム画面のアイコンの下の文字だけが変わらない。
+        </p>
+        <p>
+            原因は、日本語ロケール用の`InfoPlist.strings`というファイルに、`CFBundleDisplayName`の値が別途、直接文字列として書かれていたこと。端末が日本語ロケールになっているため、こちらの値が基本設定より優先されて使われていた。存在自体を忘れていたファイルだった。両方直したら、ようやくホーム画面の表示名も切り替わった。
+        </p>
+
+        <h2>持ち帰ったこと</h2>
+        <ul>
+            <li>アプリ名を決める前に、思い込みで「これは自分固有の名前だ」と決めつけず、一度検索して確認する</li>
+            <li>名前を変える時は「表示名だけ」と「内部識別子も」を意識的に切り分けて決める。今回は前者を選んで作業量を抑えた</li>
+            <li>`CFBundleDisplayName`のようなInfo.plistの値を変える時は、ロケール別の`InfoPlist.strings`に同じキーの上書きが無いか必ず確認する。基本設定を変えただけでは反映されないことがある</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>

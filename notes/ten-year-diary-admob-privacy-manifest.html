@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>審査に出したら「トラッキング情報が無効」と言われた話 | 開発ノート | Masaya Inaba</title>
+<meta name="description" content="App Store審査に提出した初回ビルドが、ITMS-91064というエラーで無効判定を受けた。原因は自分のアプリのプライバシーマニフェストの、ちょっとした矛盾だった。" />
+<link rel="icon" href="../assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="../styles.css?v=2" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container note-article">
+    <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
+
+    <div class="note-meta" style="margin-top: 28px;">
+        <span class="note-app-badge">めぐる日記</span>
+        <span class="note-date">2026-07-29</span>
+    </div>
+    <h1>審査に出したら「トラッキング情報が無効」と言われた話</h1>
+
+    <div class="prose">
+        <p>
+            初めてのApp Store提出。アーカイブを作って、コマンドラインからアップロードして、審査へ提出。ここまでは何の問題もなく進んだ。ところが数分後、Appleから「バイナリが無効です」という通知と、詳細を伝えるメールが届いた。
+        </p>
+
+        <h2>ITMS-91064という数字</h2>
+        <p>
+            メールの本文には「ITMS-91064: Invalid tracking information」とあり、続けて「NSPrivacyTracking must be true if NSPrivacyTrackingDomains isn't empty」という一文。プライバシーマニフェスト(`PrivacyInfo.xcprivacy`)というファイルの中の設定が、Appleの検証ルールに違反している、ということだけは分かった。
+        </p>
+        <p>
+            このアプリでは広告表示のためにGoogleのAdMobを使っていて、広告のためのトラッキング(IDFAの利用)も行っている。だから「トラッキングする」という宣言自体は正しいはずなのに、なぜ弾かれたのか。
+        </p>
+
+        <h2>4つのマニフェストを全部見比べる</h2>
+        <p>
+            アプリのビルド物の中には、プライバシーマニフェストが4つ含まれていた。自分のメインアプリ用、ウィジェット用、そしてGoogleMobileAds・UserMessagingPlatformという2つの外部SDKが持っているもの。まず疑ったのは外部SDK側だったが、中身を見比べてみると、そちらは特に矛盾は無い。
+        </p>
+        <p>
+            残るは自分のアプリ本体のファイル。よく見ると「トラッキングする(true)」と書いてある一方で、「トラッキングに使うドメインの一覧」が空の配列になっていた。つまり「トラッキングします」と宣言しているのに、「具体的にどこに繋いでトラッキングするのか」の情報が何も無い、という中途半端な状態だった。
+        </p>
+
+        <h2>ドメインを書けば直るはず、なのだが</h2>
+        <p>
+            Appleの公式なルールの文言は「ドメインの一覧が空でないなら、トラッキングはtrueでなければならない」という一方向の言い回しだったので、最初はどちらを直すべきか迷った。ただ実際の広告SDKの動作を考えれば「トラッキングをtrueにしたまま、ドメインを埋める」方が正しい対応のはず。AdMobが実際に広告配信のために接続するGoogle系のドメイン(`doubleclick.net`や`googlesyndication.com`など)を、いくつか調べて追加した。
+        </p>
+        <p>
+            ビルド番号を1つ上げて、同じ手順でもう一度アーカイブ・アップロード。今度は無効判定のメールは来ず、そのまま審査待ちの状態に進んだ。
+        </p>
+
+        <h2>持ち帰ったこと</h2>
+        <ul>
+            <li>プライバシーマニフェストの矛盾は、自分のアプリのものだけでなく外部SDKのものも含めて、複数のファイルを比較して原因を絞り込む必要がある</li>
+            <li>「トラッキングする」と宣言する場合、対象のドメイン一覧を空にしてはいけない。広告SDKが実際に使っているドメインを調べて明記する</li>
+            <li>審査提出後のエラーメールは、エラーコード(今回は`ITMS-91064`)で検索すると、同じ問題に当たった他の開発者の情報が見つかりやすい</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>

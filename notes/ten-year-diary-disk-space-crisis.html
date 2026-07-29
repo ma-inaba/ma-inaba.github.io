@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>審査直前に、Macのディスク容量が尽きて`df`すら動かなくなった話 | 開発ノート | Masaya Inaba</title>
+<meta name="description" content="App Store用のスクリーンショットを撮るためにシミュレータを作りまくっていたら、ディスク容量が完全に尽きて、状況を確認するコマンドすら実行できなくなった話。" />
+<link rel="icon" href="../assets/ten-year-diary-icon.png" />
+<link rel="stylesheet" href="../styles.css?v=2" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container note-article">
+    <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
+
+    <div class="note-meta" style="margin-top: 28px;">
+        <span class="note-app-badge">めぐる日記</span>
+        <span class="note-date">2026-07-29</span>
+    </div>
+    <h1>審査直前に、Macのディスク容量が尽きて`df`すら動かなくなった話</h1>
+
+    <div class="prose">
+        <p>
+            App Store用のスクリーンショットを準備していた。実機は手元の一番使い慣れた端末だったけれど、画面サイズがApp Storeの現在の必須サイズに合わなかった。仕方なくシミュレータで、必要なサイズ(iPhoneの大きい画面、iPadの13インチなど)をいくつか新しく作って、それぞれにアプリを入れてスクリーンショットを撮っていった。
+        </p>
+
+        <h2>気づいたら何もできなくなっていた</h2>
+        <p>
+            スクリーンショットが撮れて、次はアプリをアーカイブしてアップロードする作業に移ろうとしたところで、あらゆるコマンドが「ディスクに空き容量がありません」というエラーで失敗するようになった。状況を確認しようと`df`(ディスクの空き容量を見るための、一番基本的なコマンド)を実行してみても、そのコマンドの結果を書き出す先すら容量不足で失敗する。原因を調べるための道具そのものが使えない、という詰みかけの状況だった。
+        </p>
+
+        <h2>まずゴミ箱を空にしてもらう</h2>
+        <p>
+            とにかく少しでも空き容量を作らないと何も始まらないので、ひとまずゴミ箱を空にしてもらった。それだけでコマンドがなんとか実行できる程度の空きが生まれ、ようやく状況を調べられるようになった。
+        </p>
+
+        <h2>犯人はシミュレータだった</h2>
+        <p>
+            調べてみると、その日のうちに作ったシミュレータだけで合計12GBほど消費していた。1つのシミュレータを新しく作ってアプリを1回インストールするだけでも、想像していたよりずっと重い。スクリーンショット用に3つ作っていたので、それだけでかなりの容量になっていた。
+        </p>
+        <p>
+            使い終わったシミュレータを削除し、あわせてXcodeのビルドキャッシュ(DerivedData、こちらも1GB近くあった)も消したところ、9GBほどの空きが戻ってきた。これでようやくアーカイブ・アップロードの作業に戻れた。
+        </p>
+
+        <h2>持ち帰ったこと</h2>
+        <ul>
+            <li>特定のサイズのスクリーンショットが必要な時など、シミュレータを都度新しく作る場面では、想像以上にディスクを消費することを覚えておく</li>
+            <li>使い終わったシミュレータは、その場で`シミュレータの削除`をしておくと、後で慌てなくて済む</li>
+            <li>ディスクが本当に尽きると、状況を確認するための基本的なコマンドすら動かなくなる。「ゴミ箱を空にする」のような、コマンドを使わずにできる最初の一手を知っておくと安心</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>
