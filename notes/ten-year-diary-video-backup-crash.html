@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>動画を1本添付しただけでアプリが落ちるようになった、長い夜の話 | 開発ノート | Masaya Inaba</title>
-<meta name="description" content="10年日記に動画とiCloudバックアップ機能を足したら、あるサイズを超えた瞬間に強制終了するようになった。原因を追ううちに、CloudKitの意外な仕様や、アンインストールしても消えていなかったデータの存在にまで行き着くまでの話。" />
+<meta name="description" content="めぐる日記に動画とiCloudバックアップ機能を足したら、あるサイズを超えた瞬間に強制終了するようになった。原因を追ううちに、CloudKitの意外な仕様や、アンインストールしても消えていなかったデータの存在にまで行き着くまでの話。" />
 <link rel="icon" href="../assets/ten-year-diary-icon.png" />
 <link rel="stylesheet" href="../styles.css?v=2" />
 </head>
@@ -27,14 +27,14 @@
     <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
 
     <div class="note-meta" style="margin-top: 28px;">
-        <span class="note-app-badge">10年日記</span>
+        <span class="note-app-badge">めぐる日記</span>
         <span class="note-date">2026-07-28</span>
     </div>
     <h1>動画を1本添付しただけでアプリが落ちるようになった、長い夜の話</h1>
 
     <div class="prose">
         <p>
-            10年日記に写真だけでなく動画も添付できるようにした。ついでに、日記のデータをiCloudにワンタップで保存・復元できる機能も作った。ここまでは順調だったんだけど、動画を何本か添付した状態で「バックアップを書き出す」を押した瞬間、アプリが問答無用で強制終了するようになった。
+            めぐる日記に写真だけでなく動画も添付できるようにした。ついでに、日記のデータをiCloudにワンタップで保存・復元できる機能も作った。ここまでは順調だったんだけど、動画を何本か添付した状態で「バックアップを書き出す」を押した瞬間、アプリが問答無用で強制終了するようになった。
         </p>
 
         <h2>落ちる時はいつも同じ、SIGKILL</h2>
