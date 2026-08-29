@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>リスニングタイプ 全16パターン | Wavelength | Masaya Inaba</title>
+<meta name="description" content="Wavelengthの「あなたのリスニングタイプ」診断で登場する、4文字タイプコード16パターンすべての総称ニックネームと紹介文の一覧。" />
+<link rel="icon" href="../assets/wavelength-icon.png" />
+<link rel="stylesheet" href="../styles.css?v=2" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <a href="/apps/wavelength.html" class="back-link">← Wavelengthのページに戻る</a>
+
+    <section class="block" style="padding-bottom: 8px;">
+        <h1>リスニングタイプ 全16パターン</h1>
+        <p class="section-lead">
+            Wavelengthの「あなたのリスニングタイプ」は、共有してきた曲の時間帯や傾向を8つの軸で見て、
+            4文字のタイプコードとニックネームで教えてくれる機能です。組み合わせは全部で16通り。
+            自分や友達のタイプが、どんな人物像として言葉になっているのか、ここでまとめて見られます。
+        </p>
+    </section>
+
+    <section class="block" style="padding-top: 0;">
+        <div class="feature-grid" id="typeGrid"></div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+<script>
+  const prefixName = { NF: "深夜気まぐれ", NR: "夜更けコツコツ", SF: "週末気まぐれ", SR: "平日コツコツ" };
+  const suffixName = { EP: "新譜ハンター", EL: "推し語り部", QP: "静かな探検家", QL: "隠れ愛好家" };
+  const prefixDesc = {
+    NF: "夜更けに音楽と向き合う時間を大切にし、決まったペースにはとらわれず、その日の気分で聴きたい曲を自由に選ぶタイプです。",
+    NR: "夜遅い時間に音楽と向き合うことが多く、気分に流されず平日から日々コツコツと共有を積み重ねていく夜型リスナーです。",
+    SF: "日中の穏やかな時間に音楽を楽しむことが多く、決まったリズムよりもその時の気分に合わせて自由に聴くスタイルを好みます。",
+    SR: "日中の時間帯に音楽を楽しむことが多く、平日から日々コツコツと欠かさず音楽を共有し続ける、堅実な聴き手です。"
+  };
+  const suffixDesc = {
+    EP: "曲にひとことコメントを添えることが多く、グループの誰よりも先に新しいアーティストを見つけて紹介する、頼れる音楽の水先案内人です。",
+    EL: "曲にひとことコメントを添えることが多く、お気に入りの1曲を何度も共有しながら、その魅力を熱く語り続けます。",
+    QP: "多くを語らずとも、グループの誰よりも先に新しいアーティストを見つけて静かに共有する、控えめながら頼れる発掘屋です。",
+    QL: "多くを語らず、お気に入りの1曲を静かに何度も聴き返す、こだわりを内に秘めた音楽好きです。"
+  };
+
+  const grid = document.getElementById("typeGrid");
+  ["N", "S"].forEach(a => {
+    ["F", "R"].forEach(b => {
+      ["E", "Q"].forEach(c => {
+        ["P", "L"].forEach(d => {
+          const code = a + b + c + d;
+          const pKey = a + b, sKey = c + d;
+          const name = prefixName[pKey] + suffixName[sKey];
+          const text = `あなたは${name}です。${prefixDesc[pKey]}${suffixDesc[sKey]}`;
+          const card = document.createElement("div");
+          card.className = "feature-card";
+          card.innerHTML = `
+            <div class="icon" style="font-family: -apple-system, sans-serif; font-weight: 900; letter-spacing: 1px; font-size: 15px;">${code}</div>
+            <h3>${name}</h3>
+            <p>${text}</p>
+          `;
+          grid.appendChild(card);
+        });
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
