@@ -7,6 +7,22 @@
 <meta name="description" content="Wavelengthの「あなたのリスニングタイプ」診断で登場する、4文字タイプコード16パターンすべての総称ニックネームと紹介文の一覧。" />
 <link rel="icon" href="../assets/wavelength-icon.png" />
 <link rel="stylesheet" href="../styles.css?v=2" />
+<style>
+  .type-code {
+    display: inline-flex;
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: -apple-system, sans-serif;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    font-size: 13px;
+    margin-bottom: 14px;
+  }
+</style>
 </head>
 <body>
 
@@ -79,7 +95,7 @@
           const card = document.createElement("div");
           card.className = "feature-card";
           card.innerHTML = `
-            <div class="icon" style="font-family: -apple-system, sans-serif; font-weight: 900; letter-spacing: 1px; font-size: 15px;">${code}</div>
+            <div class="type-code">${code}</div>
             <h3>${name}</h3>
             <p>${text}</p>
           `;
