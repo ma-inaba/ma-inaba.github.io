@@ -71,7 +71,7 @@
   const grid = document.getElementById("typeGrid");
   ["CC", "CF", "FC", "FF"].forEach(tasteKey => {
     ["CC", "CF", "FC", "FF"].forEach(bondKey => {
-      const name = tastePhrases[tasteKey] + bondPhrases[bondKey];
+      const name = tastePhrases[tasteKey] + "の" + bondPhrases[bondKey];
       const text = tasteDesc[tasteKey] + bondDesc[bondKey];
       const card = document.createElement("div");
       card.className = "feature-card";
