@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>音楽の相性診断 全16パターン | Wavelength | Masaya Inaba</title>
+<meta name="description" content="Wavelengthの「音楽の相性診断」で登場する、好み軸×つながり軸の組み合わせ16パターンすべての診断名と紹介文の一覧。" />
+<link rel="icon" href="../assets/wavelength-icon.png" />
+<link rel="stylesheet" href="../styles.css?v=2" />
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <a href="/apps/wavelength.html" class="back-link">← Wavelengthのページに戻る</a>
+
+    <section class="block" style="padding-bottom: 8px;">
+        <h1>音楽の相性診断 全16パターン</h1>
+        <p class="section-lead">
+            Wavelengthの「音楽の相性診断」は、2人の共有データから「好みの近さ(アーティストの重なり・聴く時間帯)」と
+            「つながりの強さ(同時再生の頻度・お互いへのリアクション)」という2つの軸を見て、診断名で教えてくれる機能です。
+            組み合わせは全部で16通り。どんな診断名があるのか、ここでまとめて見られます。
+        </p>
+    </section>
+
+    <section class="block" style="padding-top: 0;">
+        <div class="feature-grid" id="typeGrid"></div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+<script>
+  // Shared/CompatibilityAnalysis.swiftのtastePhrases/bondPhrases/tasteDescriptions/bondDescriptionsと同じ内容。
+  const tastePhrases = { CC: "波長ぴったり", CF: "推し被り", FC: "時間かぶり", FF: "ジャンル遠め" };
+  const bondPhrases = { CC: "運命仲間", CF: "阿吽コンビ", FC: "リアクション友達", FF: "伸びしろペア" };
+  const tasteDesc = {
+    CC: "アーティストの好みも聴く時間帯もかなり近く、",
+    CF: "好きなアーティストはよく重なるけど、聴く時間帯は意外とバラバラで、",
+    FC: "好きなアーティストは違っても、聴くタイミングはよく重なっていて、",
+    FF: "好きなアーティストも聴く時間帯もあまり重ならず、"
+  };
+  const bondDesc = {
+    CC: "同じ瞬間に同じ曲を聴いていたり、お互いによく反応し合ったりしています。",
+    CF: "言葉には出さなくても、気づけば同じ曲を聴いていることが多いようです。",
+    FC: "同時に聴くタイミングは少なめでも、お互いの共有にはよく反応し合っています。",
+    FF: "今のところ同時に聴く機会もリアクションも少なめですが、これから深まっていきそうです。"
+  };
+
+  const grid = document.getElementById("typeGrid");
+  ["CC", "CF", "FC", "FF"].forEach(tasteKey => {
+    ["CC", "CF", "FC", "FF"].forEach(bondKey => {
+      const name = tastePhrases[tasteKey] + bondPhrases[bondKey];
+      const text = tasteDesc[tasteKey] + bondDesc[bondKey];
+      const card = document.createElement("div");
+      card.className = "feature-card";
+      card.innerHTML = `
+        <h3>${name}</h3>
+        <p>${text}</p>
+      `;
+      grid.appendChild(card);
+    });
+  });
+</script>
+
+</body>
+</html>
