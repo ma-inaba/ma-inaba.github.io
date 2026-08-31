@@ -22,6 +22,109 @@
     font-size: 13px;
     margin-bottom: 14px;
   }
+
+  /* キャラクターデザイン案(イラストレーター発注用の一時セクション) */
+  .draft-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--text) 8%, transparent);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+
+  .char-base-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .char-base-grid { grid-template-columns: 1fr; }
+  }
+
+  .char-base-card {
+    background: color-mix(in srgb, var(--surface) 62%, transparent);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+    border-radius: 18px;
+    padding: 20px 20px 6px;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 40%, transparent);
+  }
+
+  .char-base-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .char-base-code {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 6px;
+    color: #fff;
+    flex: 0 0 auto;
+  }
+
+  .char-base-name {
+    font-size: 15.5px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .char-base-tags {
+    display: flex;
+    gap: 6px;
+    flex: 0 0 auto;
+  }
+
+  .char-base-tag {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .char-variant-row {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .char-variant-row:last-child { border-bottom: none; }
+
+  .char-variant-suffix {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    padding-top: 1px;
+  }
+
+  .char-variant-name {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+
+  .char-variant-desc {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
 </style>
 </head>
 <body>
@@ -53,6 +156,115 @@
 
     <section class="block" style="padding-top: 0;">
         <div class="feature-grid" id="typeGrid"></div>
+    </section>
+
+    <section class="block" style="padding-top: 0;">
+        <span class="draft-badge">DRAFT · イラスト発注用メモ</span>
+        <h2>キャラクターデザイン案(16パターン)</h2>
+        <p class="section-lead">
+            上記16タイプをそれぞれキャラクターとして描き起こす際の設計案です。時間帯・曜日の軸から4つのベースキャラを作り、
+            コメント量・開拓者気質の軸を掛け合わせて16人に分岐させています。
+        </p>
+
+        <div class="char-base-grid">
+
+            <div class="char-base-card">
+                <div class="char-base-head">
+                    <span class="char-base-code" style="background:#8B6BD1">NF</span>
+                    <span class="char-base-name">夜にひとり物思いにふける、エモ系</span>
+                    <div class="char-base-tags"><span class="char-base-tag">高校生</span><span class="char-base-tag">夜</span></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#8B6BD1">+EP</div>
+                    <div><div class="char-variant-name">深夜の気まぐれ新譜ハンター</div><div class="char-variant-desc">夜、人知れず新曲を発掘してぽつぽつ嬉しそうに教える、感傷的</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#8B6BD1">+EL</div>
+                    <div><div class="char-variant-name">深夜の気まぐれ推し語り部</div><div class="char-variant-desc">夜、日記や手紙に推しへの想いを綴る、静かな熱量</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#8B6BD1">+QP</div>
+                    <div><div class="char-variant-name">深夜の気まぐれ寡黙探検家</div><div class="char-variant-desc">夜道をひとり歩きながら、誰も知らない曲をこっそり見つけてくる、無口</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#8B6BD1">+QL</div>
+                    <div><div class="char-variant-name">深夜の気まぐれ隠れ愛好家</div><div class="char-variant-desc">夜、窓辺で同じ曲を繰り返し聴く、物静か</div></div>
+                </div>
+            </div>
+
+            <div class="char-base-card">
+                <div class="char-base-head">
+                    <span class="char-base-code" style="background:#4F9BD1">NR</span>
+                    <span class="char-base-name">夜型・眼鏡の勉強家系</span>
+                    <div class="char-base-tags"><span class="char-base-tag">高校生</span><span class="char-base-tag">夜</span></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#4F9BD1">+EP</div>
+                    <div><div class="char-variant-name">夜更けのコツコツ新譜ハンター</div><div class="char-variant-desc">深夜ラジオ系、眼鏡、誰より先に新しいアーティストを見つけて紹介したがる</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#4F9BD1">+EL</div>
+                    <div><div class="char-variant-name">夜更けのコツコツ推し語り部</div><div class="char-variant-desc">眼鏡、夜勉強しながら推し語り</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#4F9BD1">+QP</div>
+                    <div><div class="char-variant-name">夜更けのコツコツ寡黙探検家</div><div class="char-variant-desc">眼鏡研究者系、無口だけど独自に新しい音楽を発掘してくる</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#4F9BD1">+QL</div>
+                    <div><div class="char-variant-name">夜更けのコツコツ隠れ愛好家</div><div class="char-variant-desc">委員長系文学少女、黙々リピート</div></div>
+                </div>
+            </div>
+
+            <div class="char-base-card">
+                <div class="char-base-head">
+                    <span class="char-base-code" style="background:#E0895A">SF</span>
+                    <span class="char-base-name">マイペースにふらっと出かける自由人系</span>
+                    <div class="char-base-tags"><span class="char-base-tag">中学生</span><span class="char-base-tag">昼</span></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#E0895A">+EP</div>
+                    <div><div class="char-variant-name">週末の気まぐれ新譜ハンター</div><div class="char-variant-desc">昼下がり、気になる新しい曲を見つけては真っ先にみんなに教えたがる、明るい発見屋</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#E0895A">+EL</div>
+                    <div><div class="char-variant-name">週末の気まぐれ推し語り部</div><div class="char-variant-desc">昼下がり、週末は推しの話で盛り上がる、のんびり喋る</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#E0895A">+QP</div>
+                    <div><div class="char-variant-name">週末の気まぐれ寡黙探検家</div><div class="char-variant-desc">昼下がり、カメラ片手にふらっとひとり出かけて、誰も知らない曲を見つけてくる、無口</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#E0895A">+QL</div>
+                    <div><div class="char-variant-name">週末の気まぐれ隠れ愛好家</div><div class="char-variant-desc">昼下がり、週末は家でお気に入りをまったり、インドア</div></div>
+                </div>
+            </div>
+
+            <div class="char-base-card">
+                <div class="char-base-head">
+                    <span class="char-base-code" style="background:#D9A63C">SR</span>
+                    <span class="char-base-name">委員長・優等生系</span>
+                    <div class="char-base-tags"><span class="char-base-tag">小学生</span><span class="char-base-tag">朝</span></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#D9A63C">+EP</div>
+                    <div><div class="char-variant-name">平日のコツコツ新譜ハンター</div><div class="char-variant-desc">朝早くから活動する委員長、誰より先に新しい曲を見つけてくる情報通、おしゃべり</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#D9A63C">+EL</div>
+                    <div><div class="char-variant-name">平日のコツコツ推し語り部</div><div class="char-variant-desc">朝型の委員長、推しの話だけ止まらない</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#D9A63C">+QP</div>
+                    <div><div class="char-variant-name">平日のコツコツ寡黙探検家</div><div class="char-variant-desc">朝型の委員長、無口だけどこっそり新しい曲を発掘してくる</div></div>
+                </div>
+                <div class="char-variant-row">
+                    <div class="char-variant-suffix" style="color:#D9A63C">+QL</div>
+                    <div><div class="char-variant-name">平日のコツコツ隠れ愛好家</div><div class="char-variant-desc">朝型の図書委員、物静か、毎日同じ曲</div></div>
+                </div>
+            </div>
+
+        </div>
     </section>
 </main>
 
