@@ -38,6 +38,15 @@
     <section class="block" style="padding-top: 0;">
         <div class="note-list">
 
+            <a href="wavelength-group-join-rls-trap.html" class="note-card">
+                <div class="note-meta">
+                    <span class="note-app-badge">Wavelength</span>
+                    <span class="note-date">2026-09-02</span>
+                </div>
+                <h3>upsert + RLSで「参加した瞬間だけ」42501になる罠</h3>
+                <p>グループへの新規参加が断続的に42501で失敗する不具合。App Store審査で2回指摘され、基盤側の障害まで疑ったが、本当の原因はON CONFLICT DO UPDATEとRLSの組み合わせだった。</p>
+            </a>
+
             <a href="wavelength-realtime-three-traps.html" class="note-card">
                 <div class="note-meta">
                     <span class="note-app-badge">Wavelength</span>

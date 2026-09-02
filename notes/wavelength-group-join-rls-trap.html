@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>upsert + RLSで「参加した瞬間だけ」42501になる罠 | 開発ノート | Masaya Inaba</title>
+<meta name="description" content="INSERT ... ON CONFLICT DO UPDATEは、実際に競合が起きなくてもUPDATE側のRLS可視性を要求する。まだメンバーでない人がグループに初めて参加する、その一瞬だけこの条件を満たせず42501になっていた話。" />
+<link rel="icon" href="../assets/wavelength-icon.png" />
+<link rel="stylesheet" href="../styles.css?v=2" />
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "934d73ec75ac49949a57b5d89923aeb3"}'></script>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Masaya Inaba</a>
+        <nav>
+            <a href="/#apps">アプリ</a>
+            <a href="/#about">About me</a>
+            <a href="/notes/">開発ノート</a>
+            <a href="/privacy.html">プライバシー</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container note-article">
+    <a href="/notes/" class="back-link">← 開発ノート一覧に戻る</a>
+
+    <div class="note-meta" style="margin-top: 28px;">
+        <span class="note-app-badge">Wavelength</span>
+        <span class="note-date">2026-09-02</span>
+    </div>
+    <h1>upsert + RLSで「参加した瞬間だけ」42501になる罠</h1>
+
+    <div class="prose">
+        <p>
+            Wavelength(Supabase + PostgreSQLで構築)で、グループへの新規参加が断続的に <code>42501 new row violates row-level security policy</code> で失敗する不具合を追った記録。App Storeの審査で2回続けて同じ症状(「グループに参加できない」)を指摘され、最終的にはSupabase基盤側の障害まで疑う羽目になったが、実際の原因はもっと単純な、RLS配下での <code>upsert</code> の使い方そのものにあった。
+        </p>
+
+        <h2>症状</h2>
+        <p>
+            招待コードでグループに参加すると、<code>group_members</code> へのINSERT(実装上は <code>.upsert(payload, onConflict: "group_id,user_id")</code>)が次のエラーで落ちる。
+        </p>
+        <p>
+            <code>{"code":"42501","message":"new row violates row-level security policy for table \"group_members\""}</code>
+        </p>
+        <p>
+            RLSポリシー自体は単純で、<code>with_check: auth.uid() = user_id</code> のみ。JWTをデコードして中身を確認しても <code>sub</code> は <code>user_id</code> と一致、<code>role: authenticated</code>、有効期限内。<code>SET LOCAL ROLE authenticated; SET LOCAL request.jwt.claims = '...'</code> で同じ条件を手動で再現すると、SQLレベルでは常に成功する。なのに実際のREST API経由(アプリの通常のSDK呼び出しでも、トークンを自分で明示指定した生のHTTPリクエストでも)は失敗する。</p>
+
+        <h2>寄り道: Supabase基盤の障害を疑う</h2>
+        <p>
+            ロールの権限周りを疑い、影響のあるポリシーの <code>roles</code> を <code>{authenticated}</code> から <code>{public}</code> に緩和(<code>auth.uid() = user_id</code> のチェック自体は変えていないので安全)。プロジェクトの再起動も複数回。JWT署名鍵をECC(ES256)からHS256(共有鍵)にローテーションしたところ、直後に2回連続で成功したものの、すぐにまた失敗に戻った。
+        </p>
+        <p>
+            Supabaseダッシュボードのログをエクスポートすると、失敗リクエストの <code>auth_user</code> フィールドには正しいユーザーIDが記録されているのに、同時刻のPostgresログでは <code>auth.uid()</code> ベースのRLSチェックが通っていない、という食い違いが見えた。ちょうど同じタイミングでstatus.supabase.comに「401 errors due to JWT rejections」という進行中のインシデントが載っており、GitHub上にも酷似した報告(<code>supabase/supabase#48302</code>、<code>#47621</code>)があった。ここまで状況証拠が揃うと「これはこちらではどうにもできないプラットフォーム側の問題だ」と結論づけたくなる。実際サポートにも問い合わせたが、送信する前に一度、変更した設定をすべて元に戻し、条件を1つずつ切り分け直すことにした。
+        </p>
+
+        <h2>本当の原因: ON CONFLICT DO UPDATEはUPDATE側のRLSも要求する</h2>
+        <p>
+            切り分けの過程で、<code>RETURNING</code> 句の有無やロール設定など複数の変数を1つずつ試した中で、決定的な差が出たのは <code>ON CONFLICT DO UPDATE</code> 句そのものの有無だった。
+        </p>
+        <p>
+            <code>INSERT INTO group_members (...) VALUES (...);</code> — 3/3で成功<br />
+            <code>INSERT INTO group_members (...) VALUES (...) ON CONFLICT (group_id, user_id) DO UPDATE SET ...;</code> — 3/3で失敗
+        </p>
+        <p>
+            対象のuser_id・group_idの組み合わせに既存行が存在しない(=実際には競合が起きない)状態でも、後者は確実に失敗した。PostgreSQLの <code>INSERT ... ON CONFLICT DO UPDATE</code> は、実行時に競合が起きるかどうかに関わらず、UPDATE側のRLSポリシー(競合先の既存行を確認するための可視性)を要求する仕様になっている。
+        </p>
+        <p>
+            <code>group_members</code> のSELECTポリシーは <code>is_group_member(group_id)</code>(=自分がそのグループの既存メンバーかどうか)を要求していた。まだメンバーになっていない人が初めて参加しようとする、まさにその瞬間はこの条件を満たせない。つまり「参加できたか確認するために覗こうとしたら、まだ参加していないので覗けない」という自己矛盾が起きていたことになる。表示名の変更など、既にメンバーである人が同じ <code>upsert</code> を使う経路では、<code>is_group_member()</code> が true になるためこの問題は起きない。
+        </p>
+
+        <h2>修正</h2>
+        <p>
+            退出時は行ごと削除する設計だったので、新規参加時に本物の競合が発生することはそもそもない。<code>upsert</code> をやめて素の <code>insert</code> に変更し、二重タップ等で万一重複した場合だけ <code>23505 unique_violation</code> を個別に捕捉して無害化した。既存メンバーの更新経路はもとの <code>upsert</code> のままにしている。
+        </p>
+        <pre style="white-space: pre-wrap; background: var(--accent-soft); padding: 14px 16px; border-radius: 10px; font-size: 13px; color: var(--text-secondary);">if isNewMembership {
+    do {
+        try await client.from("group_members").insert(payload).execute()
+    } catch {
+        if let e = error as? PostgrestError, e.code == "23505" { /* 既に参加済み。無視 */ }
+        else { throw error }
+    }
+} else {
+    try await client.from("group_members")
+        .upsert(payload, onConflict: "group_id,user_id").execute()
+}</pre>
+        <p>
+            実機・iPadシミュレータ双方で、新規グループ作成・招待コード参加・退出後の再参加のいずれも問題なく動作することを確認した。
+        </p>
+
+        <h2>持ち帰ったこと</h2>
+        <ul>
+            <li><code>ON CONFLICT DO UPDATE</code> は、実際に競合しなくてもUPDATE側のRLS(USING句の可視性)を要求する。RLS配下のテーブルで <code>upsert</code> を使う時は、INSERT側だけでなくUPDATE側の権限も常に満たせるか考える必要がある</li>
+            <li>特に「初めて権限を得る瞬間」(このケースなら「参加した瞬間に初めてメンバーとして見えるようになる」)に <code>upsert</code> を使うと、権限がまだない状態でUPDATE側の権限を要求されて詰む、という構造的な罠になりやすい</li>
+            <li>「ゲートウェイのログでは正しいユーザーが記録されているのに、DB側の権限判定だけおかしい」という状態は、外部サービスの障害を疑いたくなる強い状況証拠になる。実際に一致する公開インシデントや類似のバグ報告が見つかると尚更。ただし、そこで結論を急がず、自分の側の条件を1つずつ削る実験に戻る価値は十分にあった</li>
+            <li>原因不明のRLSエラーは、アプリを経由せず直接SQLで同じ操作を再現し、変数を1つずつ削って切り分けるのが結局一番早い</li>
+        </ul>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <nav>
+            <a href="/privacy.html">プライバシーポリシー</a>
+            <a href="/terms.html">利用規約</a>
+            <a href="/support.html">サポート</a>
+        </nav>
+        <span class="copyright">© 2026 Masaya Inaba</span>
+    </div>
+</footer>
+
+</body>
+</html>
