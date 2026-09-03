@@ -30,6 +30,51 @@
     border-radius: 14px;
     margin-bottom: 14px;
   }
+
+  .type-section-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin: 16px 0 6px;
+  }
+
+  .type-aruaru {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .type-aruaru li {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 7px;
+  }
+  .type-aruaru li::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .type-quote {
+    margin: 6px 0 0;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--accent-strong);
+  }
 </style>
 <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "934d73ec75ac49949a57b5d89923aeb3"}'></script>
 </head>
@@ -56,7 +101,7 @@
         <p class="section-lead">
             Wavelengthの「あなたのリスニングタイプ」は、共有してきた曲の時間帯や傾向を8つの軸で見て、
             4文字のタイプコードとニックネームで教えてくれる機能です。組み合わせは全部で16通り。
-            自分や友達のタイプが、どんな人物像として言葉になっているのか、ここでまとめて見られます。
+            自分や友達のタイプが、どんな人物像として言葉になっているのか、あるあるトークや口癖も添えてここでまとめて見られます。
         </p>
     </section>
 
@@ -77,8 +122,16 @@
 </footer>
 
 <script>
-  const prefixName = { NF: "深夜の気まぐれ", NR: "夜更けのコツコツ", SF: "週末の気まぐれ", SR: "平日のコツコツ" };
-  const suffixName = { EP: "新譜ハンター", EL: "推し語り部", QP: "寡黙探検家", QL: "隠れ愛好家" };
+  // ニックネームは16通り独立して名付ける(タイトルだけで内容がほぼ読めてしまわないよう、
+  // 4軸の直訳を組み合わせるのではなく、コードごとに比喩的な名前をつけている)。
+  // 説明文(prefixDesc+suffixDesc)は従来通り軸の組み合わせで生成する。
+  const typeName = {
+    NFEP: "夜空の測量士", NFEL: "深夜のコール魔", NFQP: "夜霧の旅人", NFQL: "雨夜の花守り",
+    NREP: "深夜の記者", NREL: "灯火の語り部", NRQP: "夜の観測者", NRQL: "雪あかりの番人",
+    SFEP: "陽だまりの発見人", SFEL: "陽だまりの絵描き", SFQP: "休日の寄り道人", SFQL: "凪の常連さん",
+    SREP: "朝のトラックメイカー", SREL: "朝の物語案内人", SRQP: "内緒の発掘屋", SRQL: "日々の職人"
+  };
+
   const prefixDesc = {
     NF: "夜更けに音楽と向き合う時間を大切にし、決まったペースにはとらわれず、その日の気分で聴きたい曲を自由に選ぶタイプです。",
     NR: "夜遅い時間に音楽と向き合うことが多く、気分に流されず平日から日々コツコツと共有を積み重ねていく夜型リスナーです。",
@@ -92,6 +145,32 @@
     QL: "多くを語らず、お気に入りの1曲を静かに何度も繰り返し聴き返しながら、こだわりを内に秘めた音楽好きです。"
   };
 
+  const aruaru = {
+    NFEP: ["夜空を眺めながら、次に聴く曲を探してる", "見つけた瞬間、誰よりも早くグループに投げ込む", "自分だけの「地図」を毎晩少しずつ広げてる"],
+    NFEL: ["同じ曲を、同じ人に薦めてる", "電話越しでも布教が止まらない", "「これ聴いた?」から会話が始まる"],
+    NFQP: ["夜の街をあてもなく歩きながら音楽を探す", "見つけた曲、多くは語らずそっと共有するだけ", "気分次第でいつもと違う道を選ぶ"],
+    NFQL: ["雨の日ほど、同じ曲に手が伸びる", "気に入った1曲を、大事に何度も抱えている", "多くは語らず、静かに聴き続けるだけ"],
+    NREP: ["机に向かいながら、ヘッドホン越しに新譜を探すのが日課", "見つけたら、猫を横目にすぐメモして共有", "平日の夜は決まってこの作業タイム"],
+    NREL: ["お気に入りの1曲を、まるで魔法のページのように何度も開く", "語りだすと、まるで物語を紡ぐように止まらない", "平日の夜は決まってこの曲でページをめくる"],
+    NRQP: ["眼鏡の奥で、静かに新しいアーティストを見極めてる", "見つけても多くは語らず、そっと共有だけする", "気づいたらグループの誰よりも早い"],
+    NRQL: ["寒い夜ほど、いつもの1曲にくるまりたくなる", "気づけば同じ曲を何周もしてる", "多くは語らないけど、推してるものはブレない"],
+    SFEP: ["休日の穏やかな時間に、そっと新しい曲を見つける", "見つけても大声にはならず、静かに教えてくれる", "平日はほぼ静か、週末だけ少しだけ饒舌になる"],
+    SFEL: ["休日はキャンバスに向かって、お気に入りの1曲を延々リピート", "筆を止めて語り出すと、いつも長くなる", "描いてるものより先に、聴いてる曲の話をしてくる"],
+    SFQP: ["休日は目的地を決めずに、ふらっと寄り道", "気になった曲があっても、特にコメントは付けない", "気分次第で、聴くジャンルがころころ変わる"],
+    SFQL: ["休日は決まって同じ場所、同じ曲で一息つく", "多くは語らず、居心地の良いところに戻ってくるだけ", "気づけばいつも、同じ場所に落ち着いている"],
+    SREP: ["平日の朝、ヘッドホンをつけたらもうスイッチが入ってる", "見つけた音、すぐに誰かに聴かせたくなる", "気づけば毎朝、新しい組み合わせを試してる"],
+    SREL: ["毎朝同じ曲を流しながら、同じ本の続きを読む", "お気に入りの一節、気づけば人に話してる", "平日はいつも同じページ、同じ時間から始まる"],
+    SRQP: ["お気に入りを見つけても、そっと自分の中にしまっておく", "誰かに聞かれない限り、自分からは言い出さない", "気づいたらグループの発掘担当になってる"],
+    SRQL: ["毎日同じ時間に、楽譜と向き合うように音楽を聴く", "多くは語らず、ただ黙々と聴き込む", "気づけば一番安定して共有し続けてる"]
+  };
+
+  const catchphrase = {
+    NFEP: "まだ誰も知らない、はず", NFEL: "今、電話しながら聴いてほしい", NFQP: "なんとなく、これが気になった", NFQL: "枯れないように、大事に抱えてる",
+    NREP: "これ、まだ誰も知らないと思う", NREL: "何回聴いても良いものは良い", NRQP: "これだけは、誰にも渡したくない", NRQL: "この1曲があれば、今夜も越せる",
+    SFEP: "これ、いま一番咲いてる曲だと思う", SFEL: "この曲じゃないと、筆が乗らない", SFQP: "ちょっと寄り道してから聴く", SFQL: "ここが一番落ち着くから",
+    SREP: "このビート、朝から良すぎる", SREL: "この曲を聴きながら、続きを読むの", SRQP: "実はこっそり見つけてた", SRQL: "いつも通りで"
+  };
+
   const grid = document.getElementById("typeGrid");
   ["N", "S"].forEach(a => {
     ["F", "R"].forEach(b => {
@@ -99,8 +178,9 @@
         ["P", "L"].forEach(d => {
           const code = a + b + c + d;
           const pKey = a + b, sKey = c + d;
-          const name = prefixName[pKey] + suffixName[sKey];
+          const name = typeName[code];
           const text = `あなたは${name}です。${prefixDesc[pKey]}${suffixDesc[sKey]}`;
+          const aruaruList = aruaru[code].map(line => `<li>${line}</li>`).join("");
           const card = document.createElement("div");
           card.className = "feature-card";
           card.innerHTML = `
@@ -108,6 +188,10 @@
             <div class="type-code">${code}</div>
             <h3>${name}</h3>
             <p>${text}</p>
+            <div class="type-section-label">あるあるトーク</div>
+            <ul class="type-aruaru">${aruaruList}</ul>
+            <div class="type-section-label">口癖</div>
+            <p class="type-quote">「${catchphrase[code]}」</p>
           `;
           grid.appendChild(card);
         });
